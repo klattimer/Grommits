@@ -2,6 +2,7 @@ import os
 import sys
 import zipfile
 import re
+import shutil
 from grommits.engines.DashboardWidgets.utils import *
 from grommits.config import *
 from grommits.utils import *
@@ -87,7 +88,8 @@ class Install:
         """
         Extract the archive to the base path
         """
-        widget_path = self._dash_path + widget_archive[0:-4]
+        (head, tail) = os.path.split(widget_archive)
+        widget_path = self._dash_path + tail[0:-4]
         os.makedirs(widget_path)
         z = zipfile.ZipFile(widget_archive)
         for filename in z.namelist():
@@ -103,8 +105,10 @@ class Install:
             if os.path.isdir(widget_path + "/" + f):
                 if f.endswith(".wdgt"):
                     os.rename(widget_path+"/"+f, self._dash_path + f)
+                    shutil.rmtree(widget_path)
                     widget_path = self._dash_path + f
                     break
+        print widget_path
         return widget_path
 
     def process_files( self, widget_path ):
@@ -115,11 +119,11 @@ class Install:
         self._plist = ParsePlist(widget_path)
         allfiles = []
         self._processed = []
-        for (p,d,f) in os.walk("."):
+        for (p,d,f) in os.walk(widget_path):
             for filename in f:
-                if filename.endswith(".html"): 
-                    self._process_html(filename)
-            allfiles.extend(f)
+                if filename.endswith(".html"):
+                    self._process_html(p + "/" + filename)
+                allfiles.append(p + "/" + filename)
 
         for filename in allfiles:
             if not filename in self._processed:
@@ -129,6 +133,8 @@ class Install:
                     print "WARNING: ",
                 elif filename.endswith("js"):
                     print "WARNING: ",
+                elif filename.endswith("png"):
+                    continue
                 else:
                     print "INFO: ",
                 print "Failed to process file %s" % filename
@@ -138,6 +144,7 @@ class Install:
         When an html file discovers a link to a js or css file, we call up to
         their respective process functions
         """
+        (h,t) = os.path.split(html_file)
         print "Processing html file: %s" % html_file
         # Perform the initial replacements
         f = open(html_file)
@@ -145,33 +152,66 @@ class Install:
 
         for r in self._replace:
             (o, n) = r
-            data = re.sub(o,r,data)
+            data = data.replace(o,n)
+            #data = re.sub(o,r,data)
         
         for r in self._jscalls:
             (o, n) = r
-            data = re.sub(o,r,data)
+            data = data.replace(o,n)
+            #data = re.sub(o,r,data)
         f.close()
         
-        f = open(html_file)
-        f.write(data)
-        f.close()
-
-        # Append script statements
+        # Sort out init scripts
+        m = re.search(r'.*<body(.*?)onload=(\"|\')(?P<onload>.*?)(\"|\')(.*)>', data)
+        onload = m.group("onload")
+        data = data.replace(onload, "GrommitInit();")        
 
         # Add necessary init scripts
-        widget_init = "window.widget = GrommitWidget(\"%s\", false);" % self._plist['CFBundleIdentifier']
+        script = "<script type='text/javascript'>\n"
+        script += "function GrommitInit() {\n"
+        script += "  window.widget = GrommitWidget(\"%s\", false);\n" % self._plist['CFBundleIdentifier']
+        script += "  %s\n}\n" % onload
+        script += "</script>"
+
+        data = data.replace("</head>", script+"\n</head>")
+
+        f = open(html_file, 'w')
+        f.write(data)
+        f.close()
         
         # Chain up to other scripts
         g = re.findall(r'.*(\"|\')text/css(\"|\')(.*?)(href=|@import )(\"|\')(?P<cssfile>.*?)(\"|\').*', data, re.I & re.M)
         for m in g: 
-            self._process_css(m[5])
+            self._process_css(h + "/" + m[5])
 
         g = re.findall(r'<script(.*?)(\"|\')text/javascript(\"|\')(.*?)src=(\"|\')(?P<jsfile>.*?)(\"|\')(.*)></script>', data, re.I & re.M)
         for m in g: 
-            self._process_js(m[5])
+            if not m[5].startswith("file") and not m[5].startswith("/"):
+                self._process_js(h + "/" + m[5])
         f.close()
         
         self._processed.append(html_file)
+
+    def _process_js( self, js_file ):
+        print "Processing Javascript file: %s" % js_file
+        """
+        try and figure out deps, e.g. generic_button depends on button etc...
+        """
+        if js_file.find(self._preferences['share_path']) > -1: return # Don't process our files
+        
+        f = open(js_file)
+        data = f.read()
+
+        for r in self._jscalls:
+            (o, n) = r
+            data = data.replace(o,n)
+        f.close()
+
+        f = open(js_file, 'w')
+        f.write(data)
+        f.close()
+        
+        self._processed.append(js_file)
 
     def _process_css( self, css_file ):
         """
@@ -182,18 +222,25 @@ class Install:
         """
         print "Processing CSS file: %s" % css_file
         # code to detect css imports and pdf images
-        detectfiles = []
-        detectfiles.append("@import \"(.*?)\";")
+        f = open(css_file)
+        data = f.read()
+        f.close()
         
-        self._processed.append(css_file)
+        (h,t) = os.path.split(css_file)
+        g = re.findall(r'.*@import (\"|\')(?P<cssfile>.*?)(\"|\').*', data, re.I & re.M)
+        for m in g: 
+            self._process_css(h + "/" + m[1])
 
-    def _process_js( self, js_file ):
-        print "Processing Javascript file: %s" % js_file
-        """
-        try and figure out deps, e.g. generic_button depends on button etc...
-        """
-        if js_file.find(self._preferences['share_path']) > -1: return # Don't process our files
-        self._processed.append(js_file)
+        # Scan for use of rgba() and pdf files
+        # rgba gets replaced with an opacity and converted rgb
+        # pdfs get converted to .png extensions and a .png is 
+        # generated
+
+        f = open(css_file, 'w')
+        f.write(data)
+        f.close()
+
+        self._processed.append(css_file)
 
     def _process_pdf( self, pdf_file ):
         """
