@@ -1,0 +1,18 @@
+#GrommitsClose {
+  position: absolute;
+  z-index: 99;
+  top: 0;
+  left: 0;
+}
+#GrommitsOntop {
+  position: absolute;
+  z-index: 98;
+  top: 0;
+  left: 0;
+}
+#GrommitsPin {
+  position: absolute;
+  z-index: 97;
+  top: 0;
+  left: 0;
+}

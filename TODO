@@ -1,0 +1,72 @@
+Rough todo list for grommits
+
+General app
+
+    * Core Todo
+        * Finish configuration handling
+        * Write engine plugin loader and init sequence
+
+    * GrommitWidgets 
+        * Url snippet widget i.e. a url focused on a div on that page or a rect
+        * Command line HTML generation tool php/perl script -> HTML, effecively mini-php/cgi scripting
+        * Notification history widget
+        * EDS calendar widget
+        * EDS tasks widget
+        * EDS contacts widget
+
+    * Design widget manager UI
+        * Theme picker
+        * Widget browser/uninstaller
+        * Drag to install and install button
+
+    * Window management integration
+        * Window manager hints to tell if it's on the widget layer, or the desktop
+        * always on top button - extension beyond apple
+        * pin to/from widget layer button - extension beyond apple
+        * flip animation
+
+    * HTML Widgets
+        * Create generic button class for all widget engines to inherit
+        * Create generic scrollarea class for all widget engines to inherit
+        * Create generic scrollbar class for all widget engines to inherit
+        * Create generic slider class for all widget engines to inherit
+        * Form input theming, css and js for skinning input and select tags
+
+Dashboard engine
+
+    * Finish up writing the install script, processing various source files
+    * Make parsers force other includes
+    * Polish widget object (widget.js)
+    * Polish Button class and hook up event handlers, move up to generic button class
+    * Create adapters for classes
+    * Figure out control region support with webkit
+    * Ensure resize methods work correctly
+    * Add support for access keys, and display security warnings on install
+    * Refuse to install widgets that require plugins, "sorry guv, wrong platform"
+      or check for grommit support in the plugin... eds<->iCal? 
+
+Google gadgets 
+
+    * Create adapters to classes
+    * Write install script
+    * Write widget/engine class
+
+Windows gadgets
+
+    * Create adapters to classes
+    * Write install script
+    * Write widget/engine class
+
+Yahoo Widgets?
+
+    * Create adapters to classes
+    * Write install script
+    * Write widget/engine class
+
+Konfabulator widgets?
+
+
+    * Write install script
+    * Write widget/engine class
+    * Create adapters to classes
+
