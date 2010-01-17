@@ -15,21 +15,21 @@ GrommitButtonInit = function (button_div, label, height,
     img.style.height = height +"px";
     // Styles for repeat-x, set the width and position to slightly underlay
     // below the left/right images
-    this._widget.addChildNode(img);
+    this._widget.appendChild(img);
     
     var img = document.createElement("img");
     img.src = img_left;
     img.style.position = "absolute";
     img.style.width = img_left_width +"px";
     img.style.height = height +"px";
-    this._widget.addChildNode(img);
+    this._widget.appendChild(img);
 
     var img = document.createElement("img");
     img.src = img_right;
     img.style.position = "absolute";
     img.style.width = img_right_width +"px";
     img.style.height = height +"px";
-    this._widget.addChildNode(img);
+    this._widget.appendChild(img);
     
     this._img_left = img_left;
     this._img_left_clicked = img_left_clicked;
@@ -40,7 +40,7 @@ GrommitButtonInit = function (button_div, label, height,
     
     this._label = document.createElement("span");
     this._label.innerHTML = label;
-    this._widget.addChildNode(this._label);
+    this._widget.appendChild(this._label);
     
     // Probably broken, javascript is weird about such things
     // need to find some object examples :/
