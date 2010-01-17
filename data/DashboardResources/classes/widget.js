@@ -8,8 +8,14 @@
  * The license file should be included in the source distribution or
  * at least near by.
  */
+
 function GrommitWidget(identifier, wmlayers)
 {
+    this.identifier = null;
+    this._wmlayers = wmlayers;
+    this._close = null;
+    this._pin = null;
+    this._ontop = null;
     this._init(identifier, wmlayers);
 }
 
@@ -17,9 +23,7 @@ GrommitWidget.prototype._init = function (identifier, wmlayers) {
     // Properties and elements
     this.identifier = identifier;
     this._wmlayers = wmlayers;
-    this._close = null;
-    this._pin = null;
-    this._ontop = null;
+
     
     // Callbacks
     this.ondragstart = null;
@@ -42,11 +46,11 @@ GrommitWidget.prototype.showControls = function() {
     this._ontop.style.display = "block";
 }
 
-GrommitWidget.prototype.hideControls: function() {
+GrommitWidget.prototype.hideControls = function() {
     this._ontop.style.display = "none";
 }
 
-GrommitWidget.prototype.openApplication: function(bundleId) {
+GrommitWidget.prototype.openApplication = function(bundleId) {
     prompt("GROMMIT:openApplication", bundleId);
 }
 

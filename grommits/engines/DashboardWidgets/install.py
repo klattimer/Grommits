@@ -14,7 +14,7 @@ class Install:
         try: self._conf_widgets = Widgets()
         except Singleton as e: self._conf_widgets = e.get_singleton()
         self._dash_path = self._preferences['base_path']+"/DashboardWidgets/"
-
+        self._widget_path = None
         scripts = []
         replace = []
         
@@ -117,6 +117,7 @@ class Install:
         we find in the path, recursively. 
         """
         self._plist = ParsePlist(widget_path)
+        self._widget_path = widget_path
         allfiles = []
         self._processed = []
         for (p,d,f) in os.walk(widget_path):
@@ -153,23 +154,24 @@ class Install:
         for r in self._replace:
             (o, n) = r
             data = data.replace(o,n)
-            #data = re.sub(o,r,data)
         
         for r in self._jscalls:
             (o, n) = r
             data = data.replace(o,n)
-            #data = re.sub(o,r,data)
         f.close()
         
         # Sort out init scripts
-        m = re.search(r'.*<body(.*?)onload=(\"|\')(?P<onload>.*?)(\"|\')(.*)>', data)
+        m = re.search(r'.*<body(.*?)onload=(\"|\')(?P<onload>.*?)(\"|\')(.*)>', data, re.I | re.M)
         onload = m.group("onload")
         data = data.replace(onload, "GrommitInit();")        
 
         # Add necessary init scripts
-        script = "<script type='text/javascript'>\n"
+        script = ""
+        for scr in self._scripts:
+            script += "<script type='text/javascript' src='file://%s' charset='utf-8'></script>\n" % scr
+        script += "<script type='text/javascript'>\n"
         script += "function GrommitInit() {\n"
-        script += "  window.widget = GrommitWidget(\"%s\", false);\n" % self._plist['CFBundleIdentifier']
+        script += "  window.widget = new GrommitWidget(\"%s\", false);\n" % self._plist['CFBundleIdentifier']
         script += "  %s\n}\n" % onload
         script += "</script>"
 
@@ -180,11 +182,11 @@ class Install:
         f.close()
         
         # Chain up to other scripts
-        g = re.findall(r'.*(\"|\')text/css(\"|\')(.*?)(href=|@import )(\"|\')(?P<cssfile>.*?)(\"|\').*', data, re.I & re.M)
+        g = re.findall(r'.*(\"|\')text/css(\"|\')(.*?)(href=|@import )(\"|\')(?P<cssfile>.*?)(\"|\').*', data, re.I | re.M | re.S)
         for m in g: 
             self._process_css(h + "/" + m[5])
 
-        g = re.findall(r'<script(.*?)(\"|\')text/javascript(\"|\')(.*?)src=(\"|\')(?P<jsfile>.*?)(\"|\')(.*)></script>', data, re.I & re.M)
+        g = re.findall(r'<script(.*?)(\"|\')text/javascript(\"|\')(.*?)src=(\"|\')(?P<jsfile>.*?)(\"|\')(.*)></script>', data, re.I | re.M)
         for m in g: 
             if not m[5].startswith("file") and not m[5].startswith("/"):
                 self._process_js(h + "/" + m[5])
@@ -199,14 +201,25 @@ class Install:
         """
         if js_file.find(self._preferences['share_path']) > -1: return # Don't process our files
         
-        f = open(js_file)
-        data = f.read()
-
+        try:
+            f = open(js_file)
+            data = f.read()
+        except:
+            return
         for r in self._jscalls:
             (o, n) = r
             data = data.replace(o,n)
         f.close()
 
+        # Apple tend to store PDF file images in dashboard, so we want to extract that
+        # and convert that file to png in place too, we may eventually need to do this
+        # with CSS too
+        g = re.findall(r'.*(\"|\')(.*?).pdf(\"|\').*', data, re.I | re.M)
+        for m in g:
+            os.system("inkscape -e \"%s/%s.png\" \"%s/%s.pdf\"" % (self._widget_path, m[1], self._widget_path, m[1]))
+            data = data.replace("%s.pdf" % m[1], "%s.png" % m[1])
+            self._processed.append("%s/%s.pdf" % (self._widget_path, m[1]))
+        
         f = open(js_file, 'w')
         f.write(data)
         f.close()
@@ -227,25 +240,23 @@ class Install:
         f.close()
         
         (h,t) = os.path.split(css_file)
-        g = re.findall(r'.*@import (\"|\')(?P<cssfile>.*?)(\"|\').*', data, re.I & re.M)
+        g = re.findall(r'.*@import (\"|\')(?P<cssfile>.*?)(\"|\').*', data, re.I | re.M)
         for m in g: 
             self._process_css(h + "/" + m[1])
 
         # Scan for use of rgba() and pdf files
         # rgba gets replaced with an opacity and converted rgb
-        # pdfs get converted to .png extensions and a .png is 
-        # generated
+        g = re.findall(r'.*\n(.*?):(.*?)rgba( |)\((.*?),(.*?),(.*?),(.*?)\)(.*?);.*', data, re.I | re.M)
+        for m in g:
+            old = "\n%s:%srgba%s(%s,%s,%s,%s)%s;\n" % (m[0],m[1],m[2],m[3],m[4],m[5],m[6],m[7])
+            hexstring = color_to_hex(m[3],m[4],m[5])
+            new = "\n%s:%s%s%s;\n" % (m[0],m[1],hexstring,m[7])
+            if new.find("color") > -1:
+                new = new+"\topacity:%s;\n" % m[6]
+            data = data.replace(old,new)
 
         f = open(css_file, 'w')
         f.write(data)
         f.close()
 
         self._processed.append(css_file)
-
-    def _process_pdf( self, pdf_file ):
-        """
-        Convert the pdf file to a png at appropriate resolution return png_filename
-        """
-        png_filename = "BROKEN"
-        self._processed.append(pdf_file)
-        return png_filename

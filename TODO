@@ -34,8 +34,11 @@ General app
 
 Dashboard engine
 
-    * Finish up writing the install script, processing various source files
-    * Make parsers force other includes
+    * Finish up writing the install script, processing various source files - DONE
+      - Work remaining includes ensuring that folder is removed when installing from
+        zip file preventing re-install errors
+    * JS Dependencies in the js files. js import hack? genericButton...
+    * 
     * Polish widget object (widget.js)
     * Polish Button class and hook up event handlers, move up to generic button class
     * Create adapters for classes
