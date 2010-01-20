@@ -2,6 +2,8 @@ import gobject
 gobject.threads_init()
 import gtk
 import webkit
+import jswebkit
+from grommits.config import *
 from grommits.utils import *
 from grommits.engines import Widget
 from grommits.engines import Engine
@@ -17,11 +19,13 @@ class DashboardWebView(webkit.WebView):
         self._widget_window = widget
         settings = self.get_settings()
         settings.set_property("enable-developer-extras", True)
-        self.load_uri(uri)
+        #self.load_uri(uri)
         self.set_transparent(True)
         self.connect("script-prompt", self._script_callback)
+        self.open(uri)
         self._ctx = jswebkit.JSContext(self.get_main_frame().get_global_context())
-    
+        #self._widget_window.set_jscontext(self._ctx)
+
     # pygobject/pywebkit bug, the text_ptr is a gpointer and user_data doesn't seem to work at all
     def _script_callback(self,webview,frame,message,default,text_ptr,user_data=None):
         if message.startswith("GROMMIT:"):
@@ -34,21 +38,40 @@ class DashboardWebView(webkit.WebView):
                 a.append(parse_value(arg))
             if len(a) == 0: a = None
             if callback in DashboardWidget.__dict__:
-                DashboardWidget.__dict__[callback]( self, a )
-                
+                DashboardWidget.__dict__[callback]( self._widget_window, a )
+            else:
+                print "No such callback"
+            return True
+
     def call_javascript(self, script):
-        return self._ctx.EvaluateScript(script)
+        try:
+            return self._ctx.EvaluateScript(script)
+        except:
+            print "fail!"
+            return self.execute_script(script)
 
 class DashboardWidget(Widget):
     def __init__( self, engine, widget_path ):
         Widget.__init__( self, engine, widget_path )
+
+        try: self._preferences = Preferences()
+        except Singleton as e: self._preferences = e.get_singleton()
+        
         self._plist = ParsePlist(widget_path)
         url = "file://" + widget_path + "/" + self._plist['MainHTML']
-        self._widget = DasboardWebView(self, url)
+        self._widget = DashboardWebView(self, url)
+        #self._widget.connect("load-finished", self._loaded)
+        #self.setSharePath()
         # Here we probably need to do the javascript hookups
         self.add(self._widget)
-        self.setCloseboxOffset()
+        #self.setCloseBoxOffset()
 
+    def setSharePath( self, args=None ):
+        self._widget.call_javascript("window.widget.setSharePath('%s');" % (self._preferences['share_path']))
+        
+        #def _loaded(self, view, frame, data=None):
+        #    self._widget.call_javascript("window.widget.share_path('%s');" % (self._preferences['share_path']))
+        
     def setCloseBoxOffset( self, x=None, y=None ):
         if not x: x = self._plist['CloseBoxInsetX']
         if not y: y = self._plist['CloseBoxInsetY']
@@ -82,15 +105,16 @@ class DashboardWidget(Widget):
     
     def showWidget( self, args=None ):
         self.show_all()
-        self._widget.call_javascript("window.widget.onshow()")
+        #self._widget.call_javascript("window.widget.onshow()")
         
     def removeWidget( self, args=None ):
         if not args: self._engine.remove_widget(self)
-        self._widget.call_javascript("window.widget.onremove()")
+        #self._widget.call_javascript("window.widget.onremove()")
 
     def hideWidget( self, args=None ):
-        self._widget.call_javascript("window.widget.onhide()")
-        
+        #self._widget.call_javascript("window.widget.onhide()")
+        pass
+
     def openApplication( self, args=None ):
         # Try and sensibly match apple bundleId's to similar applications or
         # preferred applications on this desktop

@@ -11,3 +11,13 @@ def color_to_hex( r, g, b ):
     b = int(b)
     color = "#%x%x%x" % (r, g, b)
     return color
+    
+def parse_value(val):
+    try:
+        val = int(val)
+    except:
+        try:
+            val = float(val)
+        except:
+            pass
+    return val

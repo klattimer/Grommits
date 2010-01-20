@@ -62,6 +62,7 @@ class Install:
         jscalls = []
         jscalls.append(("AppleButton", "GrommitButton"))
         jscalls.append(("AppleGlassButton", "GrommitGlassButton"))
+        jscalls.append(("AppleInfoButton", "GrommitInfoButton"))
         jscalls.append(("AppleScrollArea", "GrommitScrollArea"))
         jscalls.append(("AppleScrollbar", "GrommitScrollbar"))
         jscalls.append(("AppleSlider", "GrommitSlider"))
@@ -172,6 +173,8 @@ class Install:
         script += "<script type='text/javascript'>\n"
         script += "function GrommitInit() {\n"
         script += "  window.widget = new GrommitWidget(\"%s\", false);\n" % self._plist['CFBundleIdentifier']
+        script += "  window.TimeZoneInfo = new TZ();";
+        script += "  window.widget.setSharePath();";
         script += "  %s\n}\n" % onload
         script += "</script>"
 
@@ -212,12 +215,12 @@ class Install:
         f.close()
 
         # Apple tend to store PDF file images in dashboard, so we want to extract that
-        # and convert that file to png in place too, we may eventually need to do this
+        # and convert that file to svg in place too, we may eventually need to do this
         # with CSS too
         g = re.findall(r'.*(\"|\')(.*?).pdf(\"|\').*', data, re.I | re.M)
         for m in g:
-            os.system("inkscape -e \"%s/%s.png\" \"%s/%s.pdf\"" % (self._widget_path, m[1], self._widget_path, m[1]))
-            data = data.replace("%s.pdf" % m[1], "%s.png" % m[1])
+            os.system("inkscape -l \"%s/%s.svg\" \"%s/%s.pdf\"" % (self._widget_path, m[1], self._widget_path, m[1]))
+            data = data.replace("%s.pdf" % m[1], "%s.svg" % m[1])
             self._processed.append("%s/%s.pdf" % (self._widget_path, m[1]))
         
         f = open(js_file, 'w')

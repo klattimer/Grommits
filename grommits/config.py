@@ -46,7 +46,7 @@ class Preferences:
     def __contains__( self, key ):
         return key in self._preferences
 
-    def _write_config( self ):
+    def _write_config( self, arg=None ):
         pass
 
 class Widgets:
@@ -108,6 +108,6 @@ class Widgets:
         self._visible.append( (widget_path, x, y, cx, cy) )
         self._timer.restart()
 
-    def _write_config( self ):
+    def _write_config( self, arg=None ):
     
         return False

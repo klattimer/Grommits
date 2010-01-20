@@ -14,8 +14,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="black_rollie.svg"
-   inkscape:export-filename="/home/karl/Workspace/crack-house/grommits/grommits/engines/DashboardWidgets/resources/ibutton/black_rollie.png"
+   sodipodi:docname="white_rollie.svg"
+   inkscape:export-filename="/home/karl/Workspace/crack-house/grommits/data/DashboardResources/images/white_rollie.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -36,7 +36,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="37.928571"
-     inkscape:cx="6.9472693"
+     inkscape:cx="2.8079096"
      inkscape:cy="7"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -65,13 +65,13 @@
      transform="translate(0,-1038.3622)">
     <path
        sodipodi:type="arc"
-       style="color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:1"
        id="path2816"
        sodipodi:cx="6.4463277"
        sodipodi:cy="7.0790958"
        sodipodi:rx="5.7871938"
        sodipodi:ry="6.2617702"
-       d="m 12.233521,7.0790958 a 5.7871938,6.2617702 0 1 1 -11.57438709,0 5.7871938,6.2617702 0 1 1 11.57438709,0 z"
+       d="m 12.233521,7.0790958 c 0,3.4582802 -2.5910144,6.2617702 -5.7871933,6.2617702 -3.1961789,0 -5.78719379,-2.80349 -5.78719379,-6.2617702 0,-3.4582802 2.59101489,-6.26177021 5.78719379,-6.26177021 3.1961789,0 5.7871933,2.80349001 5.7871933,6.26177021 z"
        transform="matrix(1.1231696,0,0,1.0380451,-0.24031916,1038.0137)" />
   </g>
 </svg>

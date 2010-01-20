@@ -1,7 +1,7 @@
 // Add import hack to import button.js
 
 function createGenericButton (button_div, label, callback, minwidth) {
-  var b = GrommitGlassButoon(button_div, label, callback);
+  var b = GrommitGlassButton(button_div, label, callback);
   b.set_min_width(minwidth);
 }
 
