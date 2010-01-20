@@ -73,10 +73,12 @@ class DashboardWidget(Widget):
         #    self._widget.call_javascript("window.widget.share_path('%s');" % (self._preferences['share_path']))
         
     def setCloseBoxOffset( self, x=None, y=None ):
+        if x == ['']: x = None
         if not x: x = self._plist['CloseBoxInsetX']
         if not y: y = self._plist['CloseBoxInsetY']
         self._widget.call_javascript("window.widget.setCloseBoxOffset(%d, %d);" % (x, y))
-    
+        return True
+
     def prepareForTransition( self, args=None ):
         pass
     
@@ -91,9 +93,14 @@ class DashboardWidget(Widget):
     def preferenceForKey( self, args=None):
         if not args: return
         key = args[0]
+        preference = ""
+        self._widget.call_javascript("window.widget.return_values['preferenceForKey'] = '%s';" % preference)
 
     def closeWidget( self, args=None ):
-        self.removeWidget()
+        try:
+            self.removeWidget()
+        except:
+            gtk.main_quit();
     
     def setOnTop( self, args=None ):
         if not args: return

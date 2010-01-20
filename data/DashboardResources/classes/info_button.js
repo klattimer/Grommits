@@ -36,21 +36,25 @@ function GrommitInfoButton(container, front, foreground, background, callback)
     
     var _this = this;
     
-    this._show = function () {
+    this._show = function (e) {
         if (_this._info_div.style.display == "block") { return; }
         _this._info_div.style.display = "block";
         _this.setStyle(_this._f,_this._b);
         // Start a fade-in timer
         // Add event listeners mouseover/mouseout
+        e.preventDefault();
     }
-    front.onmouseover = this._show;
+    front.addEventListener("mouseover", this._show, false);
+    //front.onmouseover = this._show;
     
-    this._hide = function () {
+    this._hide = function (e) {
         if (_this._info_div.style.display == "none") { return; }
         _this._info_div.style.display = "none";
+        e.preventDefault();
     }
-    window.onmouseout = this._hide;
-    
+    //window.onmouseout = this._hide;
+    window.addEventListener("mouseout", this._hide, false);
+
     //this._container.addEventListener("mouseover", this._show, true);
     this._info_div.appendChild(this._info_bg);
     this._info_div.appendChild(this._info_img);

@@ -20,6 +20,8 @@ class Install:
         
         # General dashboard stuff
         scripts.append(self._preferences['share_path'] + "/classes/widget.js")
+        scripts.append(self._preferences['share_path'] + "/classes/timezone.js")
+        scripts.append(self._preferences['share_path'] + "/classes/grommitinit.js")
         # Replace out apple's classes with our own super duper... erm empty mostly replacements
         replace.append( ("/System/Library/WidgetResources/AppleClasses/AppleAnimator.js",
                          self._preferences['share_path'] + "/classes/animator.js") )
@@ -164,17 +166,15 @@ class Install:
         # Sort out init scripts
         m = re.search(r'.*<body(.*?)onload=(\"|\')(?P<onload>.*?)(\"|\')(.*)>', data, re.I | re.M)
         onload = m.group("onload")
-        data = data.replace(onload, "GrommitInit();")        
+        data = data.replace(onload, "WidgetInit();")        
 
         # Add necessary init scripts
         script = ""
         for scr in self._scripts:
             script += "<script type='text/javascript' src='file://%s' charset='utf-8'></script>\n" % scr
         script += "<script type='text/javascript'>\n"
-        script += "function GrommitInit() {\n"
-        script += "  window.widget = new GrommitWidget(\"%s\", false);\n" % self._plist['CFBundleIdentifier']
-        script += "  window.TimeZoneInfo = new TZ();";
-        script += "  window.widget.setSharePath();";
+        script += "function WidgetInit() {\n"
+        script += "  GrommitInit(\"%s\");\n" % self._plist['CFBundleIdentifier']
         script += "  %s\n}\n" % onload
         script += "</script>"
 

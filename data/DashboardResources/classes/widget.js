@@ -16,7 +16,52 @@ function GrommitWidget(identifier, wmlayers)
     this._close = null;
     this._pin = null;
     this._ontop = null;
+    this._over = false;
+    this._alt_key = false;
     this.sharepath = "NOT SET"
+    this.return_values = new Array();
+
+    var _this = this;
+
+    this._show_close = function (e) {
+        if (e.relatedTarget != document.body) {
+            return;
+        }
+        _this._over = true;
+        if (!_this._alt_key) { return; }
+        if (_this._close.style.display == "block") { return; }
+        _this._close.style.display = "block";
+    }
+    
+    this._hide_close = function (e) {
+        if (e.relatedTarget != document.body) {
+            return;
+        }
+        _this._over = false;
+        _this.alt_key = false;
+        if (_this._close.style.display == "none") { return; }
+        _this._close.style.display = "none";
+    }
+    
+    this._key_down = function(e) {
+        if (e.keyCode == 0) {
+            _this.alt_key = true;
+            if (!_this._over) { return; }
+            if (_this._close.style.display == "block") { return; }
+            _this._close.style.display = "block";
+        }
+    }
+    window.addEventListener("keydown", this._key_down, false);
+    
+    this._key_up = function(e) {
+        if (e.keyCode == 0) {
+            _this.alt_key = false;
+            if (_this._close.style.display == "none") { return; }
+            _this._close.style.display = "none";
+        }
+    }
+    window.addEventListener("keyup", this._key_up, false);
+    
     this._init(identifier, wmlayers);
 }
 
@@ -32,7 +77,7 @@ GrommitWidget.prototype._init = function (identifier, wmlayers) {
     this.onremove = null;
     this.onshow = null;
     this.sharepath = "";
-    
+
     document.body.onMouseOver = this.showControls;
     document.body.onMouseOut = this.hideControls;
     document.body.onKeyPress = this.showControls;
@@ -59,9 +104,11 @@ GrommitWidget.prototype.openURL = function(url) {
     prompt("GROMMIT:openURL", url);
 }
 
+// FIXME gpointer bug affects this! We work around it with an array
 GrommitWidget.prototype.preferenceForKey = function(key) {
-    // gpointer bug affects this!
-    return prompt("GROMMIT:preferenceForKey", key);
+    this.return_values['preferenceForKey'] = '';
+    prompt("GROMMIT:preferenceForKey", key);
+    return this.return_values['preferenceForKey'];
 }
 
 GrommitWidget.prototype.prepareForTransition = function() {
@@ -73,43 +120,57 @@ GrommitWidget.prototype.performTransition = function() {
 }
 
 GrommitWidget.prototype.setCloseBoxOffset = function(x,y) {
-        if (!this._close) {
-            this._close = document.createElement('img');
-            this._close.src = Grommits.DashboardResources + "/active-close-button.png";
-            this._close.id = "GrommitsClose";
-            this._close.onClick = this.closeWidget;
-            this._close.style.display = "none";
-            document.body.appendChild(this._close);
-        }
-        this._close.style.left = x + 'px';
-        this._close.style.top = y + 'px';
+    if ((!x) && (!y)) {
+        prompt("GROMMIT:setCloseBoxOffset");
+        return;
+    }
+    //alert("Setting xy " + x + " " + y);
+    size = 22;
+    if (!this._close) {
+        this._close = document.createElement('img');
+        this._close.src = this.sharepath + "/images/active-close-button.png";
+        this._close.id = "GrommitsClose";
+        this._close.style.position = "absolute";
+        this._close.style.display = "none";
+        this._close.style.zIndex = 50;
+        this._close.onclick = this.closeWidget;
         
-        if (this._wmlayers) {
-            if (!this._pin) {
-                this._pin = document.createElement('img');
-                this._pin.src = Grommits.DashboardResources + "/pin.png";
-                this._pin.id = "GrommitsPin";
-                this._pin.onClick = this.setPinned;
-                this._pin.style.display = "none";
-                document.body.appendChild(this._pin);
-            }
-            px = x + 24;
-            this._pin.style.left = px + 'px';
-            this._pin.style.top = y + 'px';
-            
-            if (!this._ontop) {
-                this._ontop = document.createElement('img');
-                this._ontop.src = Grommits.DashboardResources + "/ontop.png";
-                this._ontop.id = "GrommitsOntop";
-                this._ontop.onClick = this.setOnTop;
-                this._ontop.style.display = "none";
-                document.body.appendChild(this._ontop);
-            }
-            tx = x + 43;
-            this._ontop.style.left = tx + 'px';
-            this._ontop.style.top = y + 'px';
+        document.body.appendChild(this._close);
+    }
+    x = (x - (size/2))
+    y = (y - (size/2)) 
+    this._close.style.left = x + 'px';
+    this._close.style.top = y + 'px';
+    
+    if (this._wmlayers) {
+        if (!this._pin) {
+            this._pin = document.createElement('img');
+            this._pin.src = Grommits.DashboardResources + "/pin.png";
+            this._pin.id = "GrommitsPin";
+            this._pin.onClick = this.setPinned;
+            this._pin.style.display = "none";
+            document.body.appendChild(this._pin);
         }
-    },
+        px = x + 24;
+        this._pin.style.left = px + 'px';
+        this._pin.style.top = y + 'px';
+        
+        if (!this._ontop) {
+            this._ontop = document.createElement('img');
+            this._ontop.src = Grommits.DashboardResources + "/ontop.png";
+            this._ontop.id = "GrommitsOntop";
+            this._ontop.onClick = this.setOnTop;
+            this._ontop.style.display = "none";
+            document.body.appendChild(this._ontop);
+        }
+        tx = x + 43;
+        this._ontop.style.left = tx + 'px';
+        this._ontop.style.top = y + 'px';
+    }
+    
+    window.addEventListener("mouseout", this._hide_close, true);
+    document.addEventListener("mouseover", this._show_close, false);
+},
     
 GrommitWidget.prototype.closeWidget = function() {
     prompt("GROMMIT:closeWidget");
@@ -137,144 +198,4 @@ GrommitWidget.prototype.setSharePath = function(path) {
     } else {
         prompt("GROMMIT:setSharePath");
     }
-}
-
-var tz_lookup = new Array();
-tz_lookup['Pacific/Pago_Pago'] = -720;
-tz_lookup['Pacific/Honolulu'] = -660;
-tz_lookup['America/Adak'] = -600;
-tz_lookup['America/Anchorage'] = -540;
-tz_lookup['America/Los_Angeles'] = -480;
-tz_lookup['America/Phoenix'] = -480;
-tz_lookup['US/Pacific'] = -480;
-tz_lookup['America/Costa_Rica'] = -420;
-tz_lookup['America/Denver'] = -420;
-tz_lookup['America/El_Salvador'] = -420;
-tz_lookup['America/Guatemala'] = -420;
-tz_lookup['America/Managua'] = -420;
-tz_lookup['Canada/Mountain'] = -420;
-tz_lookup['Canada/Saskatchewan'] = -420;
-tz_lookup['US/Mountain'] = -420;
-tz_lookup['America/Bogota'] = -360;
-tz_lookup['America/Chicago'] = -360;
-tz_lookup['America/Guayaquil'] = -360;
-tz_lookup['America/Indianapolis'] = -360;
-tz_lookup['America/Lima'] = -360;
-tz_lookup['America/Mexico_City'] = -360;
-tz_lookup['America/Panama'] = -360;
-tz_lookup['America/Port-au-Prince'] = -360;
-tz_lookup['US/Central'] = -360;
-tz_lookup['America/Asuncion'] = -300;
-tz_lookup['America/Caracas'] = -300;
-tz_lookup['America/Detroit'] = -300;
-tz_lookup['America/Guyana'] = -300;
-tz_lookup['America/Havana'] = -300;
-tz_lookup['America/La_Paz'] = -300;
-tz_lookup['America/Montreal'] = -300;
-tz_lookup['America/New_York'] = -300;
-tz_lookup['America/Puerto_Rico'] = -300;
-tz_lookup['America/Santiago'] = -300;
-tz_lookup['America/Santo_Domingo'] = -300;
-tz_lookup['Canada/Eastern'] = -300;
-tz_lookup['US/Eastern'] = -300;
-tz_lookup['America/Buenos_Aires'] = -240;
-tz_lookup['America/Cayenne'] = -240;
-tz_lookup['America/Montevideo'] = -240;
-tz_lookup['America/Paramaribo'] = -240;
-tz_lookup['America/Recife'] = -240;
-tz_lookup['America/Sao_Paulo'] = -240;
-tz_lookup['Brazil/East'] = -240;
-tz_lookup['Brazil/East'] = -240;
-tz_lookup['Canada/Atlantic'] = -240;
-tz_lookup['America/Godthab'] = -180;
-tz_lookup['Atlantic/South_Georgia'] = -180;
-tz_lookup['Africa/Accra'] = -60;
-tz_lookup['Africa/Bamako'] = -60;
-tz_lookup['Africa/Casablanca'] = -60;
-tz_lookup['Africa/Conakry'] = -60;
-tz_lookup['Africa/Dakar'] = -60;
-tz_lookup['Africa/Freetown'] = -60;
-tz_lookup['Africa/Monrovia'] = -60;
-tz_lookup['Africa/Nouakchott'] = -60;
-tz_lookup['Africa/Ouagadougou'] = -60;
-tz_lookup['Atlantic/Azores'] = -60;
-tz_lookup['Atlantic/Reykjavik'] = -60;
-tz_lookup['Africa/Algiers'] = 0;
-tz_lookup['Africa/Bangui'] = 0;
-tz_lookup['Africa/Douala'] = 0;
-tz_lookup['Africa/Kinshasa'] = 0;
-tz_lookup['Africa/Lagos'] = 0;
-tz_lookup['Africa/Luanda'] = 0;
-tz_lookup['Africa/Ndjamena'] = 0;
-tz_lookup['Africa/Tunis'] = 0;
-tz_lookup['Europe/Dublin'] = 0;
-tz_lookup['Europe/Lisbon'] = 0;
-tz_lookup['Europe/London'] = 0;
-tz_lookup['Africa/Harare'] = 60;
-tz_lookup['Africa/Johannesburg'] = 60;
-tz_lookup['Africa/Lusaka'] = 60;
-tz_lookup['Africa/Maputo'] = 60;
-tz_lookup['Africa/Tripoli'] = 60;
-tz_lookup['Europe/Amsterdam'] = 60;
-tz_lookup['Europe/Berlin'] = 60;
-tz_lookup['Europe/Brussels'] = 60;
-tz_lookup['Europe/Budapest'] = 60;
-tz_lookup['Europe/Copenhagen'] = 60;
-tz_lookup['Europe/Ljubljana'] = 60;
-tz_lookup['Europe/Madrid'] = 60;
-tz_lookup['Europe/Oslo'] = 60;
-tz_lookup['Europe/Paris'] = 60;
-tz_lookup['Europe/Prague'] = 60;
-tz_lookup['Europe/Rome'] = 60;
-tz_lookup['Europe/Stockholm'] = 60;
-tz_lookup['Europe/Vienna'] = 60;
-tz_lookup['Europe/Warsaw'] = 60;
-tz_lookup['Europe/Zagreb'] = 60;
-tz_lookup['Europe/Zurich'] = 60;
-tz_lookup['Africa/Addis_Ababa'] = 120;
-tz_lookup['Africa/Asmera'] = 120;
-tz_lookup['Africa/Cairo'] = 120;
-tz_lookup['Africa/Dar_es_Salaam'] = 120;
-tz_lookup['Africa/Djibouti'] = 120;
-tz_lookup['Africa/Kampala'] = 120;
-tz_lookup['Africa/Khartoum'] = 120;
-tz_lookup['Africa/Mogadishu'] = 120;
-tz_lookup['Africa/Nairobi'] = 120;
-tz_lookup['Asia/Istanbul'] = 120;
-tz_lookup['Europe/Athens'] = 120;
-tz_lookup['Europe/Belgrade'] = 120;
-tz_lookup['Europe/Bucharest'] = 120;
-tz_lookup['Europe/Helsinki'] = 120;
-tz_lookup['Europe/Kiev'] = 120;
-tz_lookup['Europe/Sofia'] = 120;
-tz_lookup['Europe/Moscow'] = 180;
-tz_lookup['Pacific/Guam'] = 540;
-tz_lookup['Pacific/Noumea'] = 600;
-tz_lookup['Pacific/Auckland'] = 660;
-
-function TZ() {
-    this._default_continent = "North America";
-    this._default_city = "Cupertino";
-}
-
-TZ.prototype.getTimezoneOffsetForTimezoneName = function(timezone) {
-    return tz_lookup[timezone]+60;
-}
-
-TZ.prototype.currentTimeForTimeZone = function(timezone) {
-    var d = new Date();
-    var time = d.getTime();
-    var offset = tz_lookup[timezone];
-    offset = offset * 60 * 1000;
-    var dc = new Date(time+offset);
-    enc_time = (dc.getHours() * 10000) + (dc.getMinutes() * 100) + dc.getSeconds();
-    return enc_time;
-}
-
-TZ.prototype.getDefaultCityName = function() {
-    return this._default_city;
-}
-
-TZ.prototype.getDefaultContinentName = function() {
-    return this._default_continent;
 }
