@@ -14,8 +14,8 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47pre4 r22446"
-   sodipodi:docname="white_i.svg"
-   inkscape:export-filename="/home/karl/Workspace/crack-house/grommits/grommits/engines/DashboardWidgets/resources/ibutton/black_rollie.png"
+   sodipodi:docname="black_i.svg"
+   inkscape:export-filename="/home/karl/Workspace/crack-house/grommits/data/DashboardResources/images/white_i.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -34,6 +34,20 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective10-3"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3720"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -42,9 +56,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="37.928571"
-     inkscape:cx="7"
-     inkscape:cy="7"
+     inkscape:zoom="11.313708"
+     inkscape:cx="11.921549"
+     inkscape:cy="-4.86645"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -52,7 +66,12 @@
      inkscape:window-height="750"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="1"
+     inkscape:snap-global="false">
+    <inkscape:grid
+       type="xygrid"
+       id="grid2815" />
+  </sodipodi:namedview>
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -71,19 +90,19 @@
      id="layer1"
      transform="translate(0,-1038.3622)">
     <path
-       style="fill:#000000;stroke:#1c1c1c;stroke-width:0.50000000000000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.76300579;stroke-dasharray:none;fill-opacity:1"
-       d="m 4.792608,1044.4757 c 1.518954,-0.1 2.5105931,-0.5498 2.9851695,-0.9497 0.205077,0.2598 0.6656955,0.4431 0.8534605,1.2265 0.2313053,0.9651 -1.3738752,1.8069 -1.5653249,3.2858 -0.1211696,0.936 1.8397677,0.3339 2.1737288,0.079 l 0.1713748,0.145 c -0.4438164,0.5992 -1.8842532,1.4075 -2.4681027,1.595 -1.0811728,0.3472 -1.8104664,-0.4801 -1.8748823,-1.1766 -0.1199197,-1.2966 1.3885642,-1.6579 2.1258239,-3.0329 0.3889711,-0.7254 -1.4872489,-1.0712 -2.2957863,-0.9481 l -0.1054613,-0.224 z"
+       style="fill:#000000;fill-opacity:1;stroke:#515151;stroke-width:0.50000000000000000;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 5.28125,1044.6066 3.4375,0 -0.859375,5.5056 -1.71875,0 -0.859375,-5.5056 z"
        id="path3639"
-       sodipodi:nodetypes="ccssccssscc" />
+       sodipodi:nodetypes="ccccc" />
     <path
        sodipodi:type="arc"
-       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#1c1c1c;stroke-width:0.61150777000000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.76300579;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       style="color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:#515151;stroke-width:0.54449528000000003;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
        id="path4151"
        sodipodi:cx="7.3822975"
        sodipodi:cy="3.1638417"
        sodipodi:rx="1.3709981"
        sodipodi:ry="1.3709981"
        d="m 8.7532957,3.1638417 a 1.3709981,1.3709981 0 1 1 -2.7419963,0 1.3709981,1.3709981 0 1 1 2.7419963,0 z"
-       transform="matrix(0.8176511,0,0,0.8176511,1.3725192,1038.6754)" />
+       transform="matrix(0.91828165,0,0,0.91828165,0.22097169,1038.9647)" />
   </g>
 </svg>

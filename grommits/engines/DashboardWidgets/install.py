@@ -19,8 +19,8 @@ class Install:
         replace = []
         
         # General dashboard stuff
-        scripts.append(self._preferences['share_path'] + "/classes/widget.js")
-        scripts.append(self._preferences['share_path'] + "/classes/timezone.js")
+        # Other install-time includes should really be shipped in the classes folder and imported from
+        # grommitinit.js 
         scripts.append(self._preferences['share_path'] + "/classes/grommitinit.js")
         # Replace out apple's classes with our own super duper... erm empty mostly replacements
         replace.append( ("/System/Library/WidgetResources/AppleClasses/AppleAnimator.js",

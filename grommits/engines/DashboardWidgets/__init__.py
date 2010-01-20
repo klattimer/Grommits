@@ -60,18 +60,12 @@ class DashboardWidget(Widget):
         self._plist = ParsePlist(widget_path)
         url = "file://" + widget_path + "/" + self._plist['MainHTML']
         self._widget = DashboardWebView(self, url)
-        #self._widget.connect("load-finished", self._loaded)
-        #self.setSharePath()
         # Here we probably need to do the javascript hookups
         self.add(self._widget)
-        #self.setCloseBoxOffset()
 
     def setSharePath( self, args=None ):
         self._widget.call_javascript("window.widget.setSharePath('%s');" % (self._preferences['share_path']))
-        
-        #def _loaded(self, view, frame, data=None):
-        #    self._widget.call_javascript("window.widget.share_path('%s');" % (self._preferences['share_path']))
-        
+
     def setCloseBoxOffset( self, x=None, y=None ):
         if x == ['']: x = None
         if not x: x = self._plist['CloseBoxInsetX']
