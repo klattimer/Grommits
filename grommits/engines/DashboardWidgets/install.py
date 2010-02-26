@@ -3,9 +3,9 @@ import sys
 import zipfile
 import re
 import shutil
-from grommits.engines.DashboardWidgets.utils import *
-from grommits.config import *
-from grommits.utils import *
+from .utils import *
+from config import *
+from grommitutils import *
 
 class Install:
     def __init__( self ):
@@ -21,7 +21,8 @@ class Install:
         # General dashboard stuff
         # Other install-time includes should really be shipped in the classes folder and imported from
         # grommitinit.js 
-        scripts.append(self._preferences['share_path'] + "/classes/grommitinit.js")
+        scripts.append(self._preferences['share_path'] + "/classes/widget.js")
+        scripts.append(self._preferences['share_path'] + "/classes/timezone.js")
         # Replace out apple's classes with our own super duper... erm empty mostly replacements
         replace.append( ("/System/Library/WidgetResources/AppleClasses/AppleAnimator.js",
                          self._preferences['share_path'] + "/classes/animator.js") )
@@ -67,6 +68,8 @@ class Install:
         jscalls.append(("AppleInfoButton", "GrommitInfoButton"))
         jscalls.append(("AppleScrollArea", "GrommitScrollArea"))
         jscalls.append(("AppleScrollbar", "GrommitScrollbar"))
+        jscalls.append(("AppleVerticalScrollbar", "GrommitVerticalScrollbar"))
+        jscalls.append(("AppleHorizontalScrollbar", "GrommitHorizontalScrollbar"))
         jscalls.append(("AppleSlider", "GrommitSlider"))
         jscalls.append(("AppleAnimator", "GrommitAnimator"))
         jscalls.append(("AppleParser", "GrommitParser"))
@@ -92,7 +95,7 @@ class Install:
         Extract the archive to the base path
         """
         (head, tail) = os.path.split(widget_archive)
-        widget_path = self._dash_path + tail[0:-4]
+        widget_path = self._dash_path + tail[0:-4] + "-GROMMITTEMP"
         os.makedirs(widget_path)
         z = zipfile.ZipFile(widget_archive)
         for filename in z.namelist():
@@ -165,16 +168,26 @@ class Install:
         
         # Sort out init scripts
         m = re.search(r'.*<body(.*?)onload=(\"|\')(?P<onload>.*?)(\"|\')(.*)>', data, re.I | re.M)
-        onload = m.group("onload")
-        data = data.replace(onload, "WidgetInit();")        
-
+        if m:
+            onload = m.group("onload");
+            data = data.replace(onload, "WidgetInit();");      
+        else:
+            data = data.replace("<body", "<body onload=\"WidgetInit();\"");   
+            onload = "";
+            
         # Add necessary init scripts
-        script = ""
+        script = "";
         for scr in self._scripts:
             script += "<script type='text/javascript' src='file://%s' charset='utf-8'></script>\n" % scr
+        data = data.replace("<head>", "<head>\n"+script)
+
+        script = "";
         script += "<script type='text/javascript'>\n"
         script += "function WidgetInit() {\n"
-        script += "  GrommitInit(\"%s\");\n" % self._plist['CFBundleIdentifier']
+        script += "  window.widget = new GrommitWidget('%s', false);\n" % self._plist['CFBundleIdentifier']
+        script += "  window.TimeZoneInfo = new TZ();\n"
+        script += "  window.widget.setSharePath();\n"
+        script += "  window.widget.setCloseBoxOffset();\n"
         script += "  %s\n}\n" % onload
         script += "</script>"
 

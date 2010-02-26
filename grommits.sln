@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{9344bdbb-3e7f-41fc-a0dd-8665d75ee146}") = "grommits", "grommits.mdproj", "{29FBA1E8-2716-4D73-AAEC-23EC55670D8B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{29FBA1E8-2716-4D73-AAEC-23EC55670D8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29FBA1E8-2716-4D73-AAEC-23EC55670D8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29FBA1E8-2716-4D73-AAEC-23EC55670D8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29FBA1E8-2716-4D73-AAEC-23EC55670D8B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = grommits.mdproj
+		Policies = $0
+		$0.TextStylePolicy = $1
+		$1.FileWidth = 120
+		$1.NoTabsAfterNonTabs = False
+		$1.inheritsSet = Mono
+		$1.inheritsScope = text/x-python
+		$1.scope = text/x-python
+	EndGlobalSection
+EndGlobal

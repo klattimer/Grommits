@@ -26,50 +26,39 @@ General app
         * flip animation
 
     * HTML Widgets
-        * Create generic button class for all widget engines to inherit
-        * Create generic scrollarea class for all widget engines to inherit
-        * Create generic scrollbar class for all widget engines to inherit
-        * Create generic slider class for all widget engines to inherit
         * Form input theming, css and js for skinning input and select tags
 
 Dashboard engine
 
-    * Finish up writing the install script, processing various source files - DONE
-      - Work remaining includes ensuring that folder is removed when installing from
-        zip file preventing re-install errors
-    * JS Dependencies in the js files. js import hack? genericButton...
-    * 
-    * Polish widget object (widget.js)
-    * Polish Button class and hook up event handlers, move up to generic button class
-    * Create adapters for classes
+    * JS Dependencies in the js files. js import hack? genericButton, init - DONE
+    * Stop horrible BadPixmap errors on X :/
     * Figure out control region support with webkit
     * Ensure resize methods work correctly
     * Add support for access keys, and display security warnings on install
     * Refuse to install widgets that require plugins, "sorry guv, wrong platform"
       or check for grommit support in the plugin... eds<->iCal? 
+    * JSLint check
+    * Move styles stuff to CSS stylesheet, and include stylesheet on install
+    * Fix race condition on window.widget initialisation in webkit
+       - Run-time patching of HTML or onload wait timer
 
 Google gadgets 
 
-    * Create adapters to classes
     * Write install script
     * Write widget/engine class
 
 Windows gadgets
 
-    * Create adapters to classes
     * Write install script
     * Write widget/engine class
 
 Yahoo Widgets?
 
-    * Create adapters to classes
     * Write install script
     * Write widget/engine class
 
 Konfabulator widgets?
 
-
     * Write install script
     * Write widget/engine class
-    * Create adapters to classes
 

@@ -1,0 +1,31 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="grommits/engines/DashboardWidgets/__init__.py" ctype="Workbench">
+    <Files>
+      <File FileName="grommits/grommits.py" Line="4" Column="24" />
+      <File FileName="grommits/engines/__init__.py" Line="63" Column="74" />
+      <File FileName="grommits/engines/DashboardWidgets/__init__.py" Line="196" Column="1" />
+      <File FileName="grommits/engines/DashboardWidgets/install.py" Line="8" Column="6" />
+      <File FileName="grommits/engines/DashboardWidgets/utils.py" Line="1" Column="1" />
+      <File FileName="grommits/config.py" Line="18" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State expanded="True">
+          <Node name="grommits" expanded="True">
+            <Node name="grommits" expanded="True">
+              <Node name="engines" expanded="True">
+                <Node name="DashboardWidgets" expanded="True">
+                  <Node name="__init__.py" selected="True" />
+                </Node>
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>

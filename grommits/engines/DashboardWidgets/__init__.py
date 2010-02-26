@@ -1,14 +1,15 @@
 import gobject
 gobject.threads_init()
 import gtk
+import os
 import webkit
 import jswebkit
-from grommits.config import *
-from grommits.utils import *
-from grommits.engines import Widget
-from grommits.engines import Engine
-from grommits.engines.DashboardWidgets.install import Install
-from grommits.engines.DashboardWidgets.utils import *
+from config import *
+from grommitutils import parse_value
+from engines import Widget
+from engines import Engine
+#from grommits.engines.DashboardWidgets.install import Install
+from .utils import *
 
 _engine_ = "Dashboard"
 _widget_ = "DashboardWidget"
@@ -38,7 +39,19 @@ class DashboardWebView(webkit.WebView):
                 a.append(parse_value(arg))
             if len(a) == 0: a = None
             if callback in DashboardWidget.__dict__:
-                DashboardWidget.__dict__[callback]( self._widget_window, a )
+                retval = DashboardWidget.__dict__[callback]( self._widget_window, a )
+                # Make sure retval is a string
+                try:
+                    retval = int(retval)
+                    retval = "%d" % retval
+                except:
+                    try:
+                        retval = float(retval)
+                        retval = "%f" % retval
+                    except:
+                        if not retval: retval = ""
+                        if type(retval) != str: retval = ""
+                self.call_javascript("window.widget.return_values['%s'] = '%s';" % (callback, retval))
             else:
                 print "No such callback"
             return True
@@ -68,8 +81,12 @@ class DashboardWidget(Widget):
 
     def setCloseBoxOffset( self, x=None, y=None ):
         if x == ['']: x = None
-        if not x: x = self._plist['CloseBoxInsetX']
-        if not y: y = self._plist['CloseBoxInsetY']
+        if not x: 
+            try: x = self._plist['CloseBoxInsetX']
+            except: x = 12
+        if not y: 
+            try: y = self._plist['CloseBoxInsetY']
+            except: y = 12
         self._widget.call_javascript("window.widget.setCloseBoxOffset(%d, %d);" % (x, y))
         return True
 
@@ -88,7 +105,8 @@ class DashboardWidget(Widget):
         if not args: return
         key = args[0]
         preference = ""
-        self._widget.call_javascript("window.widget.return_values['preferenceForKey'] = '%s';" % preference)
+        return preference
+        # MOVED self._widget.call_javascript("window.widget.return_values['preferenceForKey'] = '%s';" % preference)
 
     def closeWidget( self, args=None ):
         try:
@@ -107,7 +125,7 @@ class DashboardWidget(Widget):
     def showWidget( self, args=None ):
         self.show_all()
         #self._widget.call_javascript("window.widget.onshow()")
-        
+
     def removeWidget( self, args=None ):
         if not args: self._engine.remove_widget(self)
         #self._widget.call_javascript("window.widget.onremove()")
@@ -129,7 +147,12 @@ class DashboardWidget(Widget):
     def system( self, args=None ):
         if not args: return
         command = args[0]
-        endHandler = args[1]
+        try:
+            endHandler = args[1]
+            retval = os.system(command)
+            self._widget.call_javascript("%s(%d);" % (endHandler, retval))
+        except:
+            return os.system(command)
 
 class Dashboard(Engine):
     _single = None
@@ -153,7 +176,6 @@ class Dashboard(Engine):
                     self.add_widget(w)
                 except:
                     print "ERROR: Widget load failed: %s" % widget_path
-                
         # Show each widget we've constructed
         for widget in self._widgets:
             widget.showWidget()

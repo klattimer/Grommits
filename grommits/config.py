@@ -62,7 +62,8 @@ class Widgets:
         Widgets._single = self
         
         self._installed = [] # Tuple ( engine_name, widget_path )
-        self._visible = [] # Tuple ( widget_path, x, y, close_x, close_y )
+        self._visible = [] # Tuple ( widget_path, x, y )
+        self._visible.append( ("Dashboard", "/home/karl/.local/share/grommits/DashboardWidgets/World Clock.wdgt") )#, 100, 100)
         self._timer = Timer(3000, self._write_config)
         self._loaded = False
         self._config_path = os.path.expanduser("~/.config/grommits")

@@ -6,9 +6,10 @@ is a way of managing widgets, and each engine will load their widgets themselves
 """
 import gtk
 import os
+import sys
 
-_engine_ = "Engine"
-_widget_ = "Widget"
+#_engine_ = "Engine"
+#_widget_ = "Widget"
 
 class Widget(gtk.Window):
     __gsignals__ = {
@@ -50,4 +51,20 @@ class Engines:
     def __init__( self ):
         # Look for folders in the same path as this file, load them up, and register
         # their engine components ("Widget/Engine" classes), read the condfiguration
-        pass
+        eng_path = sys.path[0] + "/engines/"
+        for filename in os.listdir(eng_path):
+            if os.path.isdir(eng_path + filename):
+                print filename
+                module = __import__( filename , globals(), locals(), [], -1 )
+                e = getattr( module, module._engine_)
+                engine = e()
+                engine.start()
+                #try:
+                #    e = getattr( module, module._engine_)
+                #    #widget = getattr( module, module._widget_)
+                #except:
+                #    print "ERROR: Widget engine %s incomplete" % filename
+                #    continue
+                
+        gtk.main()
+        

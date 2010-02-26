@@ -24,7 +24,7 @@ function GrommitWidget(identifier, wmlayers)
     var _this = this;
 
     this._show_close = function (e) {
-        if (e.relatedTarget != document.body) {
+        if (e && (e.relatedTarget != document.body)) {
             return;
         }
         _this._over = true;
@@ -34,7 +34,7 @@ function GrommitWidget(identifier, wmlayers)
     }
     
     this._hide_close = function (e) {
-        if (e.relatedTarget != document.body) {
+        if (e && (e.relatedTarget != document.body)) {
             return;
         }
         _this._over = false;
@@ -77,23 +77,14 @@ GrommitWidget.prototype._init = function (identifier, wmlayers) {
     this.onremove = null;
     this.onshow = null;
     this.sharepath = "";
-
-    document.body.onMouseOver = this.showControls;
-    document.body.onMouseOut = this.hideControls;
-    document.body.onKeyPress = this.showControls;
-    document.body.onKeyRelease = this.hideControls;
 }
 
 GrommitWidget.prototype.showControls = function() {
-    // Check to see if the alt key is down
-    // Make sure the mouse is over
-    // Show controls
-    if (!this._ontop) { return; }
-    this._ontop.style.display = "block";
+    this._show_close();
 }
 
 GrommitWidget.prototype.hideControls = function() {
-    this._ontop.style.display = "none";
+    this._hide_close();
 }
 
 GrommitWidget.prototype.openApplication = function(bundle_id) {
@@ -199,3 +190,5 @@ GrommitWidget.prototype.setSharePath = function(path) {
         prompt("GROMMIT:setSharePath");
     }
 }
+
+window.widget = new GrommitWidget('gov.nasa.widget.IOTD', false);

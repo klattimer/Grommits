@@ -27,9 +27,9 @@ GrommitButton.prototype._init = function (button_div, label, height,
     this._widget = document.createElement("div");
     this._widget.style.border = "0px";
     this._widget.style.display = "block";
-    this._widget.style.float = "right";
+    this._widget.style.float = "left";
     this._widget.style.width = "100%";
-    this._widget.style.position = "absolute";
+    //this._widget.style.position = "absolute";
     this._widget.style.height = height + "px";
     // Create our image files and apply styles, append to widget
     
@@ -123,6 +123,9 @@ GrommitButton.prototype._init = function (button_div, label, height,
     this._widget.onmousedown = this.onMouseDown;
     this._widget.onmouseup = this.onMouseUp;
 	this._widget.onclick = callback;
+	// Some things seem to hack private members - NASA Image of the day 
+    this._container = this._widget;
+    this.textElement = this._label;
 }
 
 
