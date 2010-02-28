@@ -1,24 +1,32 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" ctype="Workspace" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="grommits/engines/DashboardWidgets/__init__.py" ctype="Workbench">
+  <MonoDevelop.Ide.Workbench ActiveDocument="grommits/config.py" ctype="Workbench">
     <Files>
-      <File FileName="grommits/grommits.py" Line="4" Column="24" />
-      <File FileName="grommits/engines/__init__.py" Line="63" Column="74" />
-      <File FileName="grommits/engines/DashboardWidgets/__init__.py" Line="196" Column="1" />
-      <File FileName="grommits/engines/DashboardWidgets/install.py" Line="8" Column="6" />
+      <File FileName="grommits/grommits.py" Line="1" Column="1" />
+      <File FileName="grommits/engines/__init__.py" Line="1" Column="1" />
+      <File FileName="grommits/engines/DashboardWidgets/__init__.py" Line="63" Column="38" />
+      <File FileName="grommits/engines/DashboardWidgets/install.py" Line="13" Column="19" />
       <File FileName="grommits/engines/DashboardWidgets/utils.py" Line="1" Column="1" />
-      <File FileName="grommits/config.py" Line="18" Column="1" />
+      <File FileName="grommits/config.py" Line="15" Column="50" />
+      <File FileName="data/DashboardResources/classes/widget.js" Line="19" Column="38" />
+      <File FileName="data/DashboardResources/classes/generic_button.js" Line="1" Column="1" />
+      <File FileName="data/DashboardResources/classes/info_button.js" Line="35" Column="45" />
+      <File FileName="grommits/test-widget.py" Line="1" Column="6" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
           <Node name="grommits" expanded="True">
+            <Node name="data" expanded="True">
+              <Node name="DashboardResources" expanded="True">
+                <Node name="classes" expanded="True" />
+              </Node>
+            </Node>
             <Node name="grommits" expanded="True">
               <Node name="engines" expanded="True">
-                <Node name="DashboardWidgets" expanded="True">
-                  <Node name="__init__.py" selected="True" />
-                </Node>
+                <Node name="DashboardWidgets" expanded="True" />
               </Node>
+              <Node name="config.py" selected="True" />
             </Node>
           </Node>
         </State>

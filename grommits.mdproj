@@ -14,7 +14,7 @@
       <Build Optimize="false" />
     </Build>
     <Runtime>
-      <Runtime Module="main" PythonOptions="">
+      <Runtime Module="grommits.py" PythonOptions="">
         <Interpreter path="/usr/bin/python2.6" ctype="Python26Runtime" />
       </Runtime>
     </Runtime>
@@ -40,5 +40,59 @@
     <Compile Include="grommits\engines\DashboardWidgets\utils.py" />
     <Compile Include="grommits\engines\__init__.py" />
     <Compile Include="grommits\grommitutils.py" />
+    <Compile Include="grommits\test-widget.py" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="data\DashboardResources\classes\animator.js" />
+    <None Include="data\DashboardResources\classes\button.js" />
+    <None Include="data\DashboardResources\classes\generic_button.js" />
+    <None Include="data\DashboardResources\classes\info_button.js" />
+    <None Include="data\DashboardResources\classes\parser.js" />
+    <None Include="data\DashboardResources\classes\scroll_area.js" />
+    <None Include="data\DashboardResources\classes\scrollbar.js" />
+    <None Include="data\DashboardResources\classes\slider.js" />
+    <None Include="data\DashboardResources\classes\timezone.js" />
+    <None Include="data\DashboardResources\classes\widget.js" />
+    <None Include="data\DashboardResources\styles\general.css" />
+    <None Include="data\DashboardResources\images\active-close-button.png" />
+    <None Include="data\DashboardResources\images\active-close-button.svg" />
+    <None Include="data\DashboardResources\images\active-ontop.png" />
+    <None Include="data\DashboardResources\images\active-pin.png" />
+    <None Include="data\DashboardResources\images\active-pin-ontop.svg" />
+    <None Include="data\DashboardResources\images\black_i.png" />
+    <None Include="data\DashboardResources\images\black_i.svg" />
+    <None Include="data\DashboardResources\images\black_rollie.png" />
+    <None Include="data\DashboardResources\images\black_rollie.svg" />
+    <None Include="data\DashboardResources\images\defaultbutton.svg" />
+    <None Include="data\DashboardResources\images\defaultbuttonclicked.svg" />
+    <None Include="data\DashboardResources\images\glassbutton.svg" />
+    <None Include="data\DashboardResources\images\glassbuttonclicked.svg" />
+    <None Include="data\DashboardResources\images\glassbuttonleft.png" />
+    <None Include="data\DashboardResources\images\glassbuttonleftclicked.png" />
+    <None Include="data\DashboardResources\images\glassbuttonmiddle.png" />
+    <None Include="data\DashboardResources\images\glassbuttonmiddleclicked.png" />
+    <None Include="data\DashboardResources\images\glassbuttonright.png" />
+    <None Include="data\DashboardResources\images\glassbuttonrightclicked.png" />
+    <None Include="data\DashboardResources\images\lozengebutton.svg" />
+    <None Include="data\DashboardResources\images\lozengebuttonclicked.svg" />
+    <None Include="data\DashboardResources\images\ontop.png" />
+    <None Include="data\DashboardResources\images\pin.png" />
+    <None Include="data\DashboardResources\images\pin-ontop.svg" />
+    <None Include="data\DashboardResources\images\scrollbar.svg" />
+    <None Include="data\DashboardResources\images\sliderbar.svg" />
+    <None Include="data\DashboardResources\images\slider-control.svg" />
+    <None Include="data\DashboardResources\images\white_i.png" />
+    <None Include="data\DashboardResources\images\white_i.svg" />
+    <None Include="data\DashboardResources\images\white_rollie.png" />
+    <None Include="data\DashboardResources\images\white_rollie.svg" />
+  </ItemGroup>
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <TextStylePolicy FileWidth="120" NoTabsAfterNonTabs="False" inheritsSet="Mono" inheritsScope="text/x-python" scope="application/javascript" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
 </Project>

@@ -51,7 +51,7 @@ class Engines:
     def __init__( self ):
         # Look for folders in the same path as this file, load them up, and register
         # their engine components ("Widget/Engine" classes), read the condfiguration
-        eng_path = sys.path[0] + "/engines/"
+        eng_path = sys.path[len(sys.path)-1] + "/engines/"
         for filename in os.listdir(eng_path):
             if os.path.isdir(eng_path + filename):
                 print filename

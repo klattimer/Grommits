@@ -60,7 +60,7 @@ class DashboardWebView(webkit.WebView):
         try:
             return self._ctx.EvaluateScript(script)
         except:
-            print "fail!"
+            print "fail! %s" % script
             return self.execute_script(script)
 
 class DashboardWidget(Widget):
@@ -109,6 +109,7 @@ class DashboardWidget(Widget):
         # MOVED self._widget.call_javascript("window.widget.return_values['preferenceForKey'] = '%s';" % preference)
 
     def closeWidget( self, args=None ):
+        print "closeWidget Called"
         try:
             self.removeWidget()
         except:
@@ -168,14 +169,9 @@ class Dashboard(Engine):
     
     def start( self ):
         # Iterate through our configuration and load the respective widgets
-        for widget in self._conf_widgets.get_visible():
-            (engine, widget_path) = widget
-            if engine == _engine_:
-                try:
-                    w = DashboardWidget(self, widget_path)
-                    self.add_widget(w)
-                except:
-                    print "ERROR: Widget load failed: %s" % widget_path
+        for widget in self._conf_widgets.get_visible(_engine_):
+            w = DashboardWidget(self, widget)
+            self.add_widget(w)
         # Show each widget we've constructed
         for widget in self._widgets:
             widget.showWidget()

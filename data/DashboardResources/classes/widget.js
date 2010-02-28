@@ -9,19 +9,38 @@
  * at least near by.
  */
 
-function GrommitWidget(identifier, wmlayers)
+function GrommitWidget(identifier, junk)
 {
     this.identifier = null;
-    this._wmlayers = wmlayers;
     this._close = null;
-    this._pin = null;
-    this._ontop = null;
     this._over = false;
     this._alt_key = false;
     this.sharepath = "NOT SET"
     this.return_values = new Array();
 
+    this._init(identifier, junk);
+
     var _this = this;
+
+    this._show_close = function (e) {
+        if (e && (e.relatedTarget != document.body)) {
+            return;
+        }
+        if (_this._close.style.display == "block") { return; }
+        _this._close.style.display = "block";
+    }
+
+    this._hide_close = function (e) {
+        if (e && (e.relatedTarget != document.body)) {
+            return;
+        }
+        if (_this._close.style.display == "none") { return; }
+        _this._close.style.display = "none";
+    }
+
+
+/*  UPSTREAM: Webkit bug, click events won't be sent when a key is held down :/
+    maybe this only applies to the key I'm using, but either way it fails
 
     this._show_close = function (e) {
         if (e && (e.relatedTarget != document.body)) {
@@ -56,19 +75,21 @@ function GrommitWidget(identifier, wmlayers)
     this._key_up = function(e) {
         if (e.keyCode == 0) {
             _this.alt_key = false;
+            if (!_this._close) {
+                _this._close = document.getElementById("GrommitsClose");
+            }
             if (_this._close.style.display == "none") { return; }
             _this._close.style.display = "none";
         }
     }
     window.addEventListener("keyup", this._key_up, false);
-    
-    this._init(identifier, wmlayers);
+    */
+
 }
 
-GrommitWidget.prototype._init = function (identifier, wmlayers) {
+GrommitWidget.prototype._init = function (identifier, junk) {
     // Properties and elements
     this.identifier = identifier;
-    this._wmlayers = wmlayers;
 
     // Callbacks
     this.ondragstart = null;
@@ -114,54 +135,38 @@ GrommitWidget.prototype.setCloseBoxOffset = function(x,y) {
     if ((!x) && (!y)) {
         prompt("GROMMIT:setCloseBoxOffset");
         return;
+    } else if (!y) {
+        return;
     }
-    //alert("Setting xy " + x + " " + y);
-    size = 22;
+    var size = 22;
+    var _this = this;
+
+    x = (x - (size/2));
+    y = (y - (size/2));
+
     if (!this._close) {
-        this._close = document.createElement('img');
-        this._close.src = this.sharepath + "/images/active-close-button.png";
-        this._close.id = "GrommitsClose";
-        this._close.style.position = "absolute";
-        this._close.style.display = "none";
-        this._close.style.zIndex = 50;
-        this._close.onclick = this.closeWidget;
-        
-        document.body.appendChild(this._close);
-    }
-    x = (x - (size/2))
-    y = (y - (size/2)) 
-    this._close.style.left = x + 'px';
-    this._close.style.top = y + 'px';
-    
-    if (this._wmlayers) {
-        if (!this._pin) {
-            this._pin = document.createElement('img');
-            this._pin.src = Grommits.DashboardResources + "/pin.png";
-            this._pin.id = "GrommitsPin";
-            this._pin.onClick = this.setPinned;
-            this._pin.style.display = "none";
-            document.body.appendChild(this._pin);
-        }
-        px = x + 24;
-        this._pin.style.left = px + 'px';
-        this._pin.style.top = y + 'px';
-        
-        if (!this._ontop) {
-            this._ontop = document.createElement('img');
-            this._ontop.src = Grommits.DashboardResources + "/ontop.png";
-            this._ontop.id = "GrommitsOntop";
-            this._ontop.onClick = this.setOnTop;
-            this._ontop.style.display = "none";
-            document.body.appendChild(this._ontop);
-        }
-        tx = x + 43;
-        this._ontop.style.left = tx + 'px';
-        this._ontop.style.top = y + 'px';
+        close = document.createElement('div');
+        close.id = "GrommitsClose";
+        close.onclick = _this.closeWidget;
+        close.style.background = "url(" + this.sharepath + "/images/active-close-button.png)";
+        close.style.display = "none";
+        close.style.width = size + "px";
+        close.style.height = size + "px";
+        close.style.left = x + 'px';
+        close.style.position = "absolute";
+        close.style.top = y + 'px';
+        close.style.zIndex = 32767;
+        document.body.appendChild(close);
+        this._close = close;
+    } else {
+        this._close.style.zIndex = 32767;
+        this._close.style.left = x + 'px';
+        this._close.style.top = y + 'px';
     }
     
     window.addEventListener("mouseout", this._hide_close, true);
     document.addEventListener("mouseover", this._show_close, false);
-},
+}
     
 GrommitWidget.prototype.closeWidget = function() {
     prompt("GROMMIT:closeWidget");
@@ -190,5 +195,3 @@ GrommitWidget.prototype.setSharePath = function(path) {
         prompt("GROMMIT:setSharePath");
     }
 }
-
-window.widget = new GrommitWidget('gov.nasa.widget.IOTD', false);
