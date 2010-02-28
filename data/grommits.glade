@@ -179,25 +179,10 @@ Use the grommit directory to install, delete and configure desktop grommits.</pr
               <object class="GtkTable" id="table1">
                 <property name="visible">True</property>
                 <property name="border_width">8</property>
-                <property name="n_rows">6</property>
+                <property name="n_rows">4</property>
                 <property name="n_columns">2</property>
                 <property name="column_spacing">8</property>
                 <property name="row_spacing">4</property>
-                <child>
-                  <object class="GtkCheckButton" id="checkbutton1">
-                    <property name="label" translatable="yes">Start grommits with computer</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">2</property>
-                    <property name="bottom_attach">3</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
                 <child>
                   <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="visible">True</property>
@@ -214,33 +199,31 @@ Use the grommit directory to install, delete and configure desktop grommits.</pr
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
-                    <property name="top_attach">5</property>
-                    <property name="bottom_attach">6</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton1">
+                    <property name="label" translatable="yes">Start grommits with computer</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">2</property>
+                    <property name="y_options"></property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="label6">
-                    <property name="height_request">40</property>
+                    <property name="height_request">34</property>
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="yalign">1</property>
                     <property name="label" translatable="yes">&lt;b&gt;Visual Style&lt;/b&gt;</property>
                     <property name="use_markup">True</property>
-                  </object>
-                  <packing>
-                    <property name="right_attach">2</property>
-                    <property name="top_attach">4</property>
-                    <property name="bottom_attach">5</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="checkbutton2">
-                    <property name="label" translatable="yes">checkbutton</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
@@ -250,31 +233,22 @@ Use the grommit directory to install, delete and configure desktop grommits.</pr
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="checkbutton3">
-                    <property name="label" translatable="yes">checkbutton</property>
+                  <object class="GtkButton" id="button6">
+                    <property name="label" translatable="yes">Launch Grommit Directory</property>
+                    <property name="width_request">200</property>
+                    <property name="height_request">34</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
-                  </object>
-                  <packing>
-                    <property name="right_attach">2</property>
-                    <property name="y_options"></property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="checkbutton4">
-                    <property name="label" translatable="yes">checkbutton</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="draw_indicator">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="image">image4</property>
                   </object>
                   <packing>
                     <property name="right_attach">2</property>
                     <property name="top_attach">3</property>
                     <property name="bottom_attach">4</property>
+                    <property name="x_options"></property>
                     <property name="y_options"></property>
+                    <property name="y_padding">8</property>
                   </packing>
                 </child>
               </object>
@@ -469,5 +443,8 @@ Use the grommit directory to install, delete and configure desktop grommits.</pr
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
   </object>
 </interface>
