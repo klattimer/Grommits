@@ -1,0 +1,11 @@
+#!/usr/bin/env python
+from grommits.install import *
+import sys
+sys.path.append(sys.path[0]+"/grommits")
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print "Please specifiy a .wdgt.zip file"
+        sys.exit(1)
+
+    Install(sys.argv[1])
